@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/repText"
+        app:layout_constraintEnd_toStartOf="@+id/repText"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/repText"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <EditText
+        android:id="@+id/repText"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="8"
+        android:inputType="textPersonName"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/setText"
+        app:layout_constraintEnd_toStartOf="@+id/setText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/setText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/setText"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="3"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/weightText"
+        app:layout_constraintEnd_toStartOf="@+id/weightText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/repText"
+        app:layout_constraintTop_toTopOf="@+id/weightText" />
+
+    <EditText
+        android:id="@+id/weightText"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="15"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/weightTypeText"
+        app:layout_constraintEnd_toStartOf="@+id/weightTypeText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/setText"
+        app:layout_constraintTop_toTopOf="@+id/weightTypeText" />
+
+    <Spinner
+        android:id="@+id/weightTypeText"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/weightText"/>
+</android.support.constraint.ConstraintLayout>

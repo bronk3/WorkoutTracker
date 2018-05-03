@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bronk3.workouttracker.Controller.CustomizeWorkout">
+
+    <TextView
+        android:id="@+id/TextView"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/repText"
+        app:layout_constraintEnd_toStartOf="@+id/repText"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/repText" />
+
+    <TextView
+        android:id="@+id/repText"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:text="Reps"
+        android:ems="10"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/setText"
+        app:layout_constraintEnd_toStartOf="@+id/setText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/TextView"
+        app:layout_constraintTop_toTopOf="@+id/setText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/setText"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:text="Sets"
+        android:ems="10"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/weightText"
+        app:layout_constraintEnd_toStartOf="@+id/weightText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/repText"
+        app:layout_constraintTop_toTopOf="@+id/weightText" />
+
+    <TextView
+        android:id="@+id/weightText"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:ems="10"
+        android:text="Weight"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/weightTypeText"
+        app:layout_constraintEnd_toStartOf="@+id/weightTypeText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/setText"
+        app:layout_constraintTop_toTopOf="@+id/weightTypeText" />
+
+    <TextView
+        android:id="@+id/weightTypeText"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:text="Type"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/weightText" />
+</android.support.constraint.ConstraintLayout>

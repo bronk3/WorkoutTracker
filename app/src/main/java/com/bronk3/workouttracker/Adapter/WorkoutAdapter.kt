@@ -8,14 +8,14 @@ import android.view.View
 import android.widget.TextView
 import com.bronk3.workouttracker.Model.Workout
 import com.bronk3.workouttracker.R
-import com.bronk3.workouttracker.Services.DataSet.workouts
+import com.bronk3.workouttracker.Utility.getDate
 
-class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout, TextView?) -> Unit)
+class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout) -> Unit)
     : RecyclerView.Adapter<WorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflate a view
-        val view = LayoutInflater.from(context).inflate(R.layout.workout_list_adapter, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.workout_main_adapter, parent, false)
         //return view wrapped in inner class ViewHolder
         return ViewHolder(view)
     }
@@ -35,12 +35,16 @@ class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val
         var timestampLbl = itemView?.findViewById<TextView>(R.id.workoutTimeStamp)
 
         // bind view items
-        fun bindWorkout(context: Context, position: Int, itemClick: (Workout, TextView?) -> Unit) {
+        fun bindWorkout(context: Context, position: Int, itemClick: (Workout) -> Unit) {
             var current = workouts[position]
             nameLbl?.text = current.name.toUpperCase()
             timestampLbl?.text = current.timeStamp
 
-            itemView.setOnClickListener{ itemClick(current, timestampLbl) }
+            itemView.setOnClickListener {
+                current.timeStamp = getDate()
+                timestampLbl?.text = current.timeStamp
+                itemClick(current)
+            }
         }
     }
 }
