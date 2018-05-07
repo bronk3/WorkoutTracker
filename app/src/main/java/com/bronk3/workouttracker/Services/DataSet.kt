@@ -9,29 +9,29 @@ import java.util.*
 object DataSet {
 
     val exersizes: ArrayList<Exersize> = arrayListOf(
-            Exersize(1, "Crunch", "ic_launcher_background"),
-            Exersize(2, "v-situp", "ic_launcher_background"),
-            Exersize(3, "Squats", "ic_launcher_background"),
-            Exersize(4, "Lunges", "ic_launcher_background"),
-            Exersize(5, "Tricep dips", "ic_launcher_background"),
-            Exersize(6, "Shoulder press", "ic_launcher_background"),
-            Exersize(7, "Row", "ic_launcher_background"),
-            Exersize(8, "deadlift", "ic_launcher_background"),
-            Exersize(9, "Crunch", "ic_launcher_background"),
-            Exersize(10, "v-situp", "ic_launcher_background"),
-            Exersize(11, "Squats", "ic_launcher_background"),
-            Exersize(12, "Lunges", "ic_launcher_background"),
-            Exersize(13, "Tricep dips", "ic_launcher_background"),
-            Exersize(14, "Shoulder press", "ic_launcher_background"),
-            Exersize(15, "Row", "ic_launcher_background"),
-            Exersize(16, "deadlift", "ic_launcher_background")
+            Exersize(1, "Crunch", "filter", listOf( "min", "sec", "N/A")),
+            Exersize(2, "v-situp", "filter_data", listOf( "min", "sec", "N/A")),
+            Exersize(3, "Squats", "focus_group", listOf( "min", "sec", "kg", "Lbs", "N/A")),
+            Exersize(4, "Lunges", "front_desk", listOf( "min", "sec", "kg", "Lbs", "N/A")),
+            Exersize(5, "Tricep dips", "multimple_solutions", listOf( "min", "sec", "kg", "Lbs", "N/A")),
+            Exersize(6, "Shoulder press", "oil", listOf("kg", "Lbs")),
+            Exersize(7, "Row", "plastic_bottle", listOf("kg", "Lbs")),
+            Exersize(8, "run", "positioning", listOf("miles", "km")),
+            Exersize(9, "Box Jump", "service_waste_disposal", listOf("feet", "meters")),
+            Exersize(10, "Sprint", "solution", listOf("miles", "km", "min", "sec")),
+            Exersize(11, "mountain climber", "solution2", listOf("min", "sec")),
+            Exersize(12, "Lunges", "stats_histogram",listOf("N/A", "min", "sec", "kg", "Lbs")),
+            Exersize(13, "Tricep dips", "stats_pie_chart",listOf("N/A", "min", "sec", "kg", "Lbs")),
+            Exersize(14, "Shoulder press", "stock_market", listOf( "min", "sec", "kg", "Lbs", "N/A")),
+            Exersize(15, "Row", "task", listOf( "min", "sec", "kg", "Lbs", "N/A")),
+            Exersize(16, "deadlift", "trophy", listOf( "min", "sec", "kg", "Lbs", "N/A"))
     )
 
     val workouts: ArrayList<Workout> = arrayListOf(
-            Workout(1, "abs", getDate()),
-            Workout(2, "legs", getDate()),
-            Workout(3, "arms", getDate()),
-            Workout(4, "back", getDate())
+            Workout(1,1, "abs", getDate()),
+            Workout(1,2, "legs", getDate()),
+            Workout(1,3, "arms", getDate()),
+            Workout(1,4, "back", getDate())
     )
 
     val customizations: ArrayList<Customization> = arrayListOf(

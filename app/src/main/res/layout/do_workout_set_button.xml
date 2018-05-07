@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+    android:id="@+id/setButton"
+    android:layout_width="50dp"
+    android:layout_height="45dp"
+    android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:src="@drawable/circle"
+        android:backgroundTintMode="src_over"
+        android:backgroundTint="@color/colorGrey"/>
+
+    <TextView
+        android:id="@+id/setButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/setButton"
+        app:layout_constraintStart_toStartOf="@+id/setButton"
+        app:layout_constraintTop_toTopOf="@+id/setButton"
+        app:layout_constraintEnd_toEndOf="@+id/setButton"
+        android:text="8"
+        android:textSize="9pt"
+        android:textColor="@android:color/white"
+        />
+
+    <View
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/setButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

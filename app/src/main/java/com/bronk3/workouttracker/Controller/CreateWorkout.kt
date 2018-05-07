@@ -1,10 +1,12 @@
 package com.bronk3.workouttracker.Controller
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.EditText
 import com.bronk3.workouttracker.Adapter.CreateWorkoutAdapter
 import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.R
@@ -26,7 +28,6 @@ class CreateWorkout : AppCompatActivity() {
         setContentView(R.layout.activity_create_workout)
 
         val exersizeClick = { exersize: Exersize, selectedIdHash: HashMap<Int, Int> ->
-            exersizeCount.text = selectedIdHash.count().toString()
             selectedIds = ArrayList(selectedIdHash.values)
         }
 
@@ -35,11 +36,22 @@ class CreateWorkout : AppCompatActivity() {
         chooseExersize.setHasFixedSize(true)
 
         CustomizeWorkoutBtn.setOnClickListener {
-            val customizeWorkout = Intent(this, CustomizeWorkout::class.java)
-            val workoutId = createWorkout(workoutName.text.toString(), getDate())
-            customizeWorkout.putExtra(WORKOUT_ID, workoutId)
-            customizeWorkout.putExtra(EXERSIZE_ID_LIST, selectedIds)
-            startActivity(customizeWorkout)
+
+            var builder = AlertDialog.Builder(this)
+            var layout = layoutInflater.inflate(R.layout.workout_name_alert, null)
+
+            builder.setView(layout)
+                    .setPositiveButton("Ok") { _, _ ->
+                        val workoutName = layout.findViewById<EditText>(R.id.dialogWorkoutName)
+                        val customizeWorkout = Intent(this, CustomizeWorkout::class.java)
+                        val workoutId = createWorkout(workoutName.text.toString(), getDate())
+                        customizeWorkout.putExtra(WORKOUT_ID, workoutId)
+                        customizeWorkout.putExtra(EXERSIZE_ID_LIST, selectedIds)
+                        startActivity(customizeWorkout)
+                    }
+                    .setNegativeButton("Cancel") { _, _ ->
+
+                    }.show()
         }
     }
 }

@@ -5,4 +5,6 @@
     <color name="colorLightest">#E5F2EB</color>
     <color name="colorDarkest">#294356</color>
     <color name="colorPink">#E78796</color>
+    <color name="colorGrey">#E5E7E5</color>
+
 </resources>

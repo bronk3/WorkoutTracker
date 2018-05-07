@@ -3,7 +3,7 @@ package com.bronk3.workouttracker.Model
 import android.os.Parcel
 import android.os.Parcelable
 
-class Workout(val id: Int, var name: String, var timeStamp: String)
+class Workout(val userId: Int, val id: Int, var name: String, var timeStamp: String)
 {
     override fun toString(): String {
         return "Id $id, Name: $name, TimeStamp: $timeStamp"

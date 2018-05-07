@@ -29,6 +29,7 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
         return exersizes.count()
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.BindViewHolder(context, position, itemClick)
     }
@@ -45,14 +46,13 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
             name.text = current.name
             itemView.setTag(current.id)
 
-
             itemView.setOnClickListener { view ->
                 println(current)
                 println(view.getTag())
                 if(!view.isSelected) {
                     view.isSelected = true
                     selectedIds.put(position, view.getTag() as Int)
-                    view.setBackgroundResource(R.color.colorDarkest)
+                    view.setBackgroundResource(R.color.colorPrimary)
                     name.setTextColor(Color.WHITE)
                 } else {
                     view.isSelected = false

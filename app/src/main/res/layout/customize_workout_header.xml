@@ -52,7 +52,7 @@
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:ems="10"
-        android:text="Weight"
+        android:text="Measure"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/weightTypeText"
         app:layout_constraintEnd_toStartOf="@+id/weightTypeText"
