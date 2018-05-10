@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.bronk3.workouttracker.Model.Customization
 import com.bronk3.workouttracker.R
-import com.bronk3.workouttracker.Utility.getExersizeById
 import android.widget.AdapterView
 import com.bronk3.workouttracker.Model.Exersize
+import com.bronk3.workouttracker.Model.MeasurementTypes
 
 class CustomizeWorkoutAdapter(val context: Context, val customizations: ArrayList<Customization>) :
         RecyclerView.Adapter<CustomizeWorkoutAdapter.ViewHolder>() {
@@ -44,12 +44,12 @@ class CustomizeWorkoutAdapter(val context: Context, val customizations: ArrayLis
 
 
         fun bindViewHolder(context: Context, holder: ViewHolder, position: Int) {
-
             val customization = customizations[position]
-            val exersize = getExersizeById(customization.ExersizeId)
+            val exersize = customization.exersize
             val resourceId = context.resources.getIdentifier(exersize?.image,
                     "drawable", context.packageName)
-            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, exersize?.measurementTypes)
+            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,
+                    MeasurementTypes.stringArray(exersize.measurementTypes))
 
             // Attach View Fields with Data Fields
             exersizeImage.setImageResource(resourceId)
@@ -82,9 +82,9 @@ class TextWatch(val type: String, val customization: Customization) : TextWatche
 
     override fun afterTextChanged(s: Editable?) {
         when(type) {
-            "rep" -> customization.reps = s.toString().toIntOrNull()
-            "set" ->customization.sets = s.toString().toIntOrNull()
-            "measure" ->customization.measurement = s.toString().toIntOrNull()
+            "rep" -> customization.reps = s.toString().toInt()
+            "set" ->customization.setNumber = s.toString().toInt()
+            "measure" ->customization.measurement = s.toString().toInt()
             else -> ""
         }
     }

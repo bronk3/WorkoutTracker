@@ -12,9 +12,9 @@ import android.widget.TextView
 import com.bronk3.workouttracker.Controller.CustomizeWorkout
 import com.bronk3.workouttracker.Model.Workout
 import com.bronk3.workouttracker.R
-import com.bronk3.workouttracker.Utility.getDate
+import com.bronk3.workouttracker.Utility.*
 
-class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout) -> Unit, val editClick: (Int) -> Unit)
+class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout) -> Unit, val editClick: (Workout) -> Unit)
     : RecyclerView.Adapter<WorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,19 +41,19 @@ class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val
 
 
         // bind view items
-        fun bindWorkout(context: Context, position: Int, itemClick: (Workout) -> Unit, editClick: (Int) -> Unit) {
+        fun bindWorkout(context: Context, position: Int, itemClick: (Workout) -> Unit, editClick: (Workout) -> Unit) {
             var current = workouts[position]
             nameLbl?.text = current.name.toUpperCase()
             timestampLbl?.text = current.timeStamp
 
-            itemView.setOnClickListener {
-                current.timeStamp = getDate()
+            nameLbl?.setOnClickListener {
+                current.timeStamp = getDateNow()
                 timestampLbl?.text = current.timeStamp
                 itemClick(current)
             }
 
             editBtn?.setOnClickListener {
-                editClick(current.id)
+                editClick(current)
             }
         }
     }

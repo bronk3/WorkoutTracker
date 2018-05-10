@@ -13,10 +13,8 @@ import com.bronk3.workouttracker.R
 import kotlin.math.absoluteValue
 
 
-class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersize>, val itemClick: (Exersize, HashMap<Int, Int>) -> Unit)
+class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersize>, val itemClick: (Exersize) -> Boolean)
     : RecyclerView.Adapter<CreateWorkoutAdapter.ViewHolder>() {
-
-    var selectedIds = hashMapOf<Int, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //Inflator
@@ -29,7 +27,6 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
         return exersizes.count()
     }
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.BindViewHolder(context, position, itemClick)
     }
@@ -39,28 +36,24 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
         val image = itemView.findViewById<ImageView>(R.id.exersizeImage)
         val name = itemView.findViewById<TextView>(R.id.exersizeName)
 
-        fun BindViewHolder (context: Context, position: Int, itemClick: (Exersize, HashMap<Int, Int>) -> Unit) {
+        fun BindViewHolder (context: Context, position: Int, itemClick: (Exersize) -> Boolean) {
             val current = exersizes[position]
             val resourceId = context.resources.getIdentifier(current.image, "drawable", context.packageName)
             image.setImageResource(resourceId)
             name.text = current.name
-            itemView.setTag(current.id)
+            itemView.setTag(current)
 
             itemView.setOnClickListener { view ->
-                println(current)
-                println(view.getTag())
                 if(!view.isSelected) {
                     view.isSelected = true
-                    selectedIds.put(position, view.getTag() as Int)
                     view.setBackgroundResource(R.color.colorPrimary)
                     name.setTextColor(Color.WHITE)
                 } else {
                     view.isSelected = false
-                    selectedIds.remove(position)
                     view.setBackgroundColor(Color.TRANSPARENT)
                     name.setTextColor(R.color.colorPrimaryDark.absoluteValue)
                 }
-                itemClick(current, selectedIds)
+                itemClick(view.getTag() as Exersize)
             }
         }
     }

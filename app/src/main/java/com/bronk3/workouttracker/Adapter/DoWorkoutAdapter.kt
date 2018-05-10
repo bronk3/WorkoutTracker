@@ -5,34 +5,42 @@ import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.bronk3.workouttracker.Model.Customization
+import com.bronk3.workouttracker.Model.MeasurementTypes
 import com.bronk3.workouttracker.R
-import com.bronk3.workouttracker.Utility.getExersizeById
+import java.util.*
 
 
 class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Customization>)
     : RecyclerView.Adapter<DoWorkoutAdapter.ViewHolder>() {
 
+
+    //Save State between activities
+    lateinit var workoutSetState: List<ArrayList<Boolean>>
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        workoutSetState = List(customizations.count(), { index: Int ->
+            var setLength = customizations[index].setNumber
+            if (setLength == null)
+                    setLength = 0
+            var arr = ArrayList<Boolean>()
+            for (i in 0..setLength-1) {
+                arr.add(false)
+            }
+            arr
+        })
+        super.onAttachedToRecyclerView(recyclerView)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var layout = LayoutInflater.from(context).inflate(R.layout.do_workout_adapter, parent, false)
         var buttonLayout = LayoutInflater.from(context).inflate(R.layout.do_workout_set_button, null)
-        Log.d("view", "Create View $viewType")
         return ViewHolder(layout, buttonLayout)
-    }
-
-    override fun onViewRecycled(holder: ViewHolder) {
-        Log.d("view", holder.toString())
-        Log.d("view",holder.setContainer.toString())
-    }
-
-    override fun onFailedToRecycleView(holder: ViewHolder): Boolean {
-        Log.d("view", holder.toString())
-        Log.d("view",holder.setContainer.toString())
-        return super.onFailedToRecycleView(holder)
     }
 
     override fun getItemCount(): Int {
@@ -48,57 +56,70 @@ class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Custo
         val image = itemView.findViewById<ImageView>(R.id.exersizeImage)
         val exersizeWeightText = itemView.findViewById<TextView>(R.id.exersizeWeightText)
 
-//        val buttonView1 = buttonView
-//        val buttonNumber = buttonView.findViewById<TextView>(R.id.setButtonText)
-
-
         fun BindViewHolder(context: Context, position: Int) {
-            Log.d("view", "bind view $position")
             val customization = customizations[position]
-            val exersize = getExersizeById(customization.ExersizeId)
-            val setNumber = customization.sets
+            val exersize = customization.exersize
+            val setNumber = customization.setNumber
             val repNumber = customization.reps
             val resource = context.resources.getIdentifier(exersize?.image, "drawable", context.packageName)
             image.setImageResource(resource)
-            if(customization.measurement != null && customization.measurementType != "N/A") {
+            if(customization.measurementType != MeasurementTypes.NA) {
                 exersizeWeightText.text = "${customization.measurement} ${customization.measurementType}"
             }
             var i = 0
 
             if(setNumber != null) {
-                setContainer.setHasTransientState(true)
                 while( i < setNumber) {
-                    /*This is heavy need to find a way not to get the error:
-                     java.lang.IllegalStateException: The specified child already has a parent.
-                     You must call removeView() on the child's parent first.
-                        when trying to use a copy of a inflated layout - buttonView1
-                    */
                     val setButton = LayoutInflater.from(context).inflate(R.layout.do_workout_set_button, null)
-                    Log.d("view", "Create set button ${setButton.id}")
-                    val setButtonNumber = setButton.findViewById<TextView>(R.id.setButtonText)
-                    setButtonNumber.setTag(repNumber)
-                    setButtonNumber.text = repNumber.toString()
+                    val circleBtn = setButton.findViewById<ImageView>(R.id.setButton)
+                    val textBtn = setButton.findViewById<TextView>(R.id.setButtonText)
+                    textBtn.setTag(repNumber)
+                    textBtn.text = repNumber.toString()
+                    setButton.setTag(i)
+                    var isSelectedText = ""
+                    if (workoutSetState[position][i]) {
+                         isSelectedText =  "is selected"
+                        textBtn.text = ""
+                        textBtn.background = ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp)
+                        (circleBtn.drawable as GradientDrawable)?.setColor(ContextCompat.getColor(context, R.color.colorPink))
+                    } else {
+                        textBtn.text = textBtn.getTag().toString()
+                        textBtn.background = null
+                        (circleBtn.drawable as GradientDrawable)?.setColor(ContextCompat.getColor(context, R.color.colorGrey))
+                    }
+
+                    Log.d("view", "On Click Listener: " +
+                            "${position}_${i}_${isSelectedText}_${(circleBtn.drawable as GradientDrawable)?.color.defaultColor}")
 
                     //Click Set Button
                     setButton.setOnClickListener { setButtonClick: View ->
                         val circleBtn = setButtonClick.findViewById<ImageView>(R.id.setButton)
                         val textBtn = setButtonClick.findViewById<TextView>(R.id.setButtonText)
-                        if(!setButtonClick.isSelected) {
+                        val i = setButton.getTag() as Int
+                        if(!workoutSetState[position][i]) {
                             textBtn.text = ""
                             textBtn.background = ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp)
                             (circleBtn.drawable as GradientDrawable)?.setColor(ContextCompat.getColor(context, R.color.colorPink))
-                            setButtonClick.isSelected = true
+                            workoutSetState[position][i] = true
                         } else {
                             textBtn.text = textBtn.getTag().toString()
                             textBtn.background = null
                             (circleBtn.drawable as GradientDrawable)?.setColor(ContextCompat.getColor(context, R.color.colorGrey))
-                            setButtonClick.isSelected = false
+                            workoutSetState[position][i] = false
+                        }
+                        val isSelectedText = if(workoutSetState[position][setButton.getTag() as Int]) "is selected" else "not selected"
+                        Log.d("view", "On Click Listener: ${position}_${setButtonClick.getTag()}_$isSelectedText" +
+                                "_${(circleBtn.drawable as GradientDrawable)?.color.defaultColor}")
+
+                        var list = workoutSetState[position]
+                        var complete = list.contains(false)
+                        if(!complete) {
+                            Toast.makeText(context, "Congrats!", Toast.LENGTH_SHORT).show()
                         }
                     }
                     setContainer.addView(setButton)
                     i++
                 }
-                setContainer.setHasTransientState(false)
             }
         }
     }

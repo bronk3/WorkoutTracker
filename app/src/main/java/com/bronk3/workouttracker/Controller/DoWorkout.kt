@@ -3,6 +3,7 @@ package com.bronk3.workouttracker.Controller
 import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.widget.LinearLayoutManager
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Adapter.DoWorkoutAdapter
@@ -17,25 +18,22 @@ class DoWorkout : AppCompatActivity() {
     lateinit var workout: Workout
     var customizationList = ArrayList<Customization>()
 
+// TODO: Save workout state
+//    override fun onSaveInstanceState(savedInstanceState: Bundle?) {
+//        super.onSaveInstanceState(savedInstanceState)
+//    }
+//
+//    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+//        super.onRestoreInstanceState(savedInstanceState)
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_do_workout)
 
         //Extras
-        val workout_id = intent.getIntExtra(WORKOUT_ID, 0)
-        val exersizeIdList = intent.getIntegerArrayListExtra(EXERSIZE_ID_LIST)
-
-        if(workout_id != 0) {
-            if (exersizeIdList == null) {
-                // Edit Workout
-                workout = getWorkoutById(workout_id)
-                customizationList = getCustomizationByWorkoutId(workout_id)
-            } else {
-                //Create New Workout
-                workout = getWorkoutById(workout_id)
-                customizationList = createCustomizationListByExerciseIds(workout_id, exersizeIdList)
-            }
-        }
+        val workout_id = intent.getIntExtra(WORKOUT, 0)
+        val exersizeIdList = intent.getIntegerArrayListExtra(EXERSIZE_LIST)
 
 
         val adapter = DoWorkoutAdapter(this, customizationList)
@@ -43,8 +41,11 @@ class DoWorkout : AppCompatActivity() {
         setListContainer.adapter = adapter
         setListContainer.setHasFixedSize(true)
 
+        // TODO Record when workout is complete
+
     }
 
+// TODO either warn when leaving workout or ask to resume left workout
 //    override fun onBackPressed() {
 ////        var endWorkoutWarning = AlertDialog.Builder(this)
 ////        endWorkoutWarning

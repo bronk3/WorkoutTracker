@@ -9,36 +9,27 @@ import android.view.View
 import android.widget.EditText
 import com.bronk3.workouttracker.Adapter.CustomizeWorkoutAdapter
 import com.bronk3.workouttracker.Model.Customization
+import com.bronk3.workouttracker.Model.CustomizationCollection.createCustomizationList
+import com.bronk3.workouttracker.Model.CustomizationCollection.updateCustomizationList
+import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.Workout
+import com.bronk3.workouttracker.Model.WorkoutCollection
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Utility.*
 import kotlinx.android.synthetic.main.activity_customize_workout.*
 
 class CustomizeWorkout : AppCompatActivity() {
 
-    lateinit var workout: Workout
-    var customizationList = ArrayList<Customization>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customize_workout)
 
         //Extras
-        val workout_id = intent.getIntExtra(WORKOUT_ID, 0)
-        val exersizeIdList = intent.getIntegerArrayListExtra(EXERSIZE_ID_LIST)
+        val workout = intent.getParcelableExtra<Workout>(WORKOUT)
+        val exersizeList = intent.getParcelableArrayListExtra<Exersize>(EXERSIZE_LIST)
+        var customizationList = createCustomizationList(exersizeList, workout)
 
-        if(workout_id != 0) {
-            if (exersizeIdList == null) {
-                // Edit Workout
-                workout = getWorkoutById(workout_id)
-                customizationList = getCustomizationByWorkoutId(workout_id)
-            } else {
-                //Create New Workout
-                workout = getWorkoutById(workout_id)
-                customizationList = createCustomizationListByExerciseIds(workout_id, exersizeIdList)
-            }
-        }
-
+        //View
         workoutName.setText(workout.name)
         workoutName.setOnClickListener { view: View ->
 
@@ -63,14 +54,9 @@ class CustomizeWorkout : AppCompatActivity() {
         editWorkout.layoutManager = linearLayoutManager
         editWorkout.setHasFixedSize(true)
 
-
-        //Set focus on first element
-        //can do Layoutmanger.findFirstVisibleItemPosition()
-        //and adapter.getItemId(int position)
-
         // Save Customization
         submitEditChanges.setOnClickListener {
-            updateCustomizations(customizationList)
+            updateCustomizationList(customizationList)
             val intent = Intent(this, WorkoutMain::class.java)
             startActivity(intent)
         }
