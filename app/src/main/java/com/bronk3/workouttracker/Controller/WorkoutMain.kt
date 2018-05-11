@@ -40,6 +40,6 @@ class WorkoutMain : AppCompatActivity() {
         //Show Workout list
         workoutList.setHasFixedSize(true)
         workoutList.layoutManager = LinearLayoutManager(this)
-        workoutList.adapter = WorkoutAdapter(this, WorkoutCollection.list(), doClick, editClick)
+        workoutList.adapter = WorkoutAdapter(this, WorkoutCollection.database, doClick, editClick)
     }
 }

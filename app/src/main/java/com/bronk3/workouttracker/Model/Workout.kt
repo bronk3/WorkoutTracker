@@ -4,24 +4,30 @@ import android.os.Parcel
 import android.os.Parcelable
 
 
-class Workout (var name: String, var timeStamp: String) : Parcelable
+class Workout
+        (var name: String,
+        var timeStamp: String,
+        var ExersizeList: ArrayList<Exersize>)
+    : Parcelable
 {
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString()) {
+    init {
+        ExersizeList = ArrayList()
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(name)
-        dest?.writeString(timeStamp)
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
+        parcel.writeString(timeStamp)
+        parcel.readTypedList(ExersizeList, Exersize.CREATOR)
     }
+
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readTypedList(ExersizeList, Exersize.CREATOR)
+    ) {}
 
     override fun describeContents(): Int {
         return 0
-    }
-
-    override fun toString(): String {
-        return "Name: $name, TimeStamp: $timeStamp"
     }
 
     companion object CREATOR : Parcelable.Creator<Workout> {
@@ -33,4 +39,5 @@ class Workout (var name: String, var timeStamp: String) : Parcelable
             return arrayOfNulls(size)
         }
     }
+
 }

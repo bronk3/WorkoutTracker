@@ -10,16 +10,14 @@ import android.widget.EditText
 import com.bronk3.workouttracker.Adapter.CreateWorkoutAdapter
 import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.ExersizeCollection
-import com.bronk3.workouttracker.Model.WorkoutCollection.createWorkout
+import com.bronk3.workouttracker.Model.Workout
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Utility.*
 import kotlinx.android.synthetic.main.activity_create_workout.*
 
 class CreateWorkout : AppCompatActivity() {
 
-    private lateinit var recyclerLayout: RecyclerView.LayoutManager
-    private lateinit var recyclerAdapter: RecyclerView.Adapter<*>
-    lateinit var selectedExersizeArrayList: ArrayList<Exersize>
+    var selectedExersizeArrayList = ArrayList<Exersize>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +34,7 @@ class CreateWorkout : AppCompatActivity() {
             builder.setView(layout)
                     .setPositiveButton("Ok") { _, _ ->
                         val workoutName = layout.findViewById<EditText>(R.id.dialogWorkoutName)
-                        val newWorkout = createWorkout(workoutName.text.toString(), getDateNow())
+                        val newWorkout = Workout(workoutName.text.toString(), getDateNow(), ArrayList())
 
                         val customizeWorkout = Intent(this, CustomizeWorkout::class.java)
                         customizeWorkout.putExtra(WORKOUT, newWorkout)
@@ -48,7 +46,7 @@ class CreateWorkout : AppCompatActivity() {
         }
 
         // Show Exersizes
-        chooseExersize.adapter = CreateWorkoutAdapter(this, ExersizeCollection.list(), exersizeClick)
+        chooseExersize.adapter = CreateWorkoutAdapter(this, ExersizeCollection.database, exersizeClick)
         chooseExersize.layoutManager = GridLayoutManager(this, 3)
         chooseExersize.setHasFixedSize(true)
 

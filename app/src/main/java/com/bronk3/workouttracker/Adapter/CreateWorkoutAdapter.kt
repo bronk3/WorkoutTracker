@@ -13,7 +13,7 @@ import com.bronk3.workouttracker.R
 import kotlin.math.absoluteValue
 
 
-class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersize>, val itemClick: (Exersize) -> Boolean)
+class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>, val itemClick: (Exersize) -> Boolean)
     : RecyclerView.Adapter<CreateWorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,7 +24,7 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
     }
 
     override fun getItemCount(): Int {
-        return exersizes.count()
+        return exersizeList.count()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,11 +37,11 @@ class CreateWorkoutAdapter(val context: Context, val exersizes: ArrayList<Exersi
         val name = itemView.findViewById<TextView>(R.id.exersizeName)
 
         fun BindViewHolder (context: Context, position: Int, itemClick: (Exersize) -> Boolean) {
-            val current = exersizes[position]
-            val resourceId = context.resources.getIdentifier(current.image, "drawable", context.packageName)
+            val exersize = exersizeList[position]
+            val resourceId = context.resources.getIdentifier(exersize.image, "drawable", context.packageName)
             image.setImageResource(resourceId)
-            name.text = current.name
-            itemView.setTag(current)
+            name.text = exersize.name.Name
+            itemView.setTag(exersize)
 
             itemView.setOnClickListener { view ->
                 if(!view.isSelected) {

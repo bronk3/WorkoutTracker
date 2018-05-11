@@ -8,12 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.EditText
 import com.bronk3.workouttracker.Adapter.CustomizeWorkoutAdapter
-import com.bronk3.workouttracker.Model.Customization
-import com.bronk3.workouttracker.Model.CustomizationCollection.createCustomizationList
-import com.bronk3.workouttracker.Model.CustomizationCollection.updateCustomizationList
-import com.bronk3.workouttracker.Model.Exersize
-import com.bronk3.workouttracker.Model.Workout
-import com.bronk3.workouttracker.Model.WorkoutCollection
+import com.bronk3.workouttracker.Model.*
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Utility.*
 import kotlinx.android.synthetic.main.activity_customize_workout.*
@@ -26,8 +21,6 @@ class CustomizeWorkout : AppCompatActivity() {
 
         //Extras
         val workout = intent.getParcelableExtra<Workout>(WORKOUT)
-        val exersizeList = intent.getParcelableArrayListExtra<Exersize>(EXERSIZE_LIST)
-        var customizationList = createCustomizationList(exersizeList, workout)
 
         //View
         workoutName.setText(workout.name)
@@ -48,7 +41,7 @@ class CustomizeWorkout : AppCompatActivity() {
         }
 
         //Adapter
-        val adapter = CustomizeWorkoutAdapter(this, customizationList)
+        val adapter = CustomizeWorkoutAdapter(this, ExersizeCollection.database)
         editWorkout.adapter = adapter
         val linearLayoutManager = LinearLayoutManager(this)
         editWorkout.layoutManager = linearLayoutManager
@@ -56,7 +49,6 @@ class CustomizeWorkout : AppCompatActivity() {
 
         // Save Customization
         submitEditChanges.setOnClickListener {
-            updateCustomizationList(customizationList)
             val intent = Intent(this, WorkoutMain::class.java)
             startActivity(intent)
         }

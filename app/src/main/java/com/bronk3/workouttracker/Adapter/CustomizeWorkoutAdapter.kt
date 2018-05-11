@@ -8,13 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.bronk3.workouttracker.Model.Customization
 import com.bronk3.workouttracker.R
 import android.widget.AdapterView
 import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.MeasurementTypes
 
-class CustomizeWorkoutAdapter(val context: Context, val customizations: ArrayList<Customization>) :
+class CustomizeWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>) :
         RecyclerView.Adapter<CustomizeWorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,7 +24,7 @@ class CustomizeWorkoutAdapter(val context: Context, val customizations: ArrayLis
     }
 
     override fun getItemCount(): Int {
-        return customizations.count()
+        return exersizeList.count()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,56 +34,50 @@ class CustomizeWorkoutAdapter(val context: Context, val customizations: ArrayLis
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         //Get View Fields
-        val exersizeImage = itemView?.findViewById<ImageView>(R.id.exersizeImage)
-        val repText = itemView?.findViewById<EditText>(R.id.repText)
-        val setText = itemView?.findViewById<EditText>(R.id.setText)
-        val weightText = itemView?.findViewById<EditText>(R.id.weightText)
-        val weightTypeDropDown = itemView?.findViewById<Spinner>(R.id.weightTypeText)
-
-
+        val exersizeImage = itemView.findViewById<ImageView>(R.id.exersizeImage)
+        val repText = itemView.findViewById<EditText>(R.id.repText)
+        val setText = itemView.findViewById<EditText>(R.id.setText)
+        val weightText = itemView.findViewById<EditText>(R.id.weightText)
+        val weightTypeDropDown = itemView.findViewById<Spinner>(R.id.weightTypeText)
 
         fun bindViewHolder(context: Context, holder: ViewHolder, position: Int) {
-            val customization = customizations[position]
-            val exersize = customization.exersize
-            val resourceId = context.resources.getIdentifier(exersize?.image,
+            val exersize = exersizeList[position]
+            val resourceId = context.resources.getIdentifier(exersize.image,
                     "drawable", context.packageName)
             val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,
-                    MeasurementTypes.stringArray(exersize.measurementTypes))
+                    MeasurementTypes.toStringArray())
 
             // Attach View Fields with Data Fields
             exersizeImage.setImageResource(resourceId)
-            repText?.setText(customization.reps?.toString(), TextView.BufferType.EDITABLE)
-            setText?.setText(customization.sets?.toString(), TextView.BufferType.EDITABLE)
-            weightText?.setText(customization.measurement?.toString(), TextView.BufferType.EDITABLE)
+            repText?.setText(exersize.reps.toString(), TextView.BufferType.EDITABLE)
+            setText?.setText(exersize.sets.toString(), TextView.BufferType.EDITABLE)
+            weightText?.setText(exersize.measure.toString(), TextView.BufferType.EDITABLE)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             weightTypeDropDown.setAdapter(adapter)
-            weightTypeDropDown.setSelection(exersize?.measurementTypes!!.indexOf(customization.measurementType))
+            weightTypeDropDown.setSelection(MeasurementTypes.values().indexOf(exersize.measureType))
 
             //Data Change Listeners
-            repText.addTextChangedListener(TextWatch("rep", customization))
-            setText.addTextChangedListener(TextWatch("set", customization))
-            weightText.addTextChangedListener(TextWatch("measure", customization))
-            weightTypeDropDown.setOnItemSelectedListener(SpinnerListener(customization, exersize))
+            repText.addTextChangedListener(TextWatch("rep", exersize))
+            setText.addTextChangedListener(TextWatch("set", exersize))
+            weightText.addTextChangedListener(TextWatch("measure", exersize))
+            weightTypeDropDown.setOnItemSelectedListener(SpinnerListener(exersize))
         }
     }
 }
 
-class SpinnerListener(val customization: Customization, val exersize: Exersize?) : AdapterView.OnItemSelectedListener {
+class SpinnerListener(val exersize: Exersize) : AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
-        customization.measurementType = exersize?.measurementTypes!![position]
+        exersize.measureType = MeasurementTypes.values()[position]
     }
-
     override fun onNothingSelected(parentView: AdapterView<*>) {}
-
 }
 
-class TextWatch(val type: String, val customization: Customization) : TextWatcher {
-
+class TextWatch(val type: String, val exersize: Exersize) : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
         when(type) {
-            "rep" -> customization.reps = s.toString().toInt()
-            "set" ->customization.setNumber = s.toString().toInt()
-            "measure" ->customization.measurement = s.toString().toInt()
+            "rep" -> exersize.reps = s.toString().toInt()
+            "set" ->exersize.sets = s.toString().toInt()
+            "measure" ->exersize.measure = s.toString().toInt()
             else -> ""
         }
     }

@@ -23,5 +23,4 @@
         <activity android:name=".Controller.CustomizeWorkout" />
         <activity android:name=".Controller.DoWorkout"></activity>
     </application>
-
 </manifest>

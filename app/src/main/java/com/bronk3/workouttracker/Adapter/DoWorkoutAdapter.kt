@@ -10,13 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.bronk3.workouttracker.Model.Customization
+import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.MeasurementTypes
 import com.bronk3.workouttracker.R
 import java.util.*
 
 
-class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Customization>)
+class DoWorkoutAdapter(val context: Context, val exersizeList: ArrayList<Exersize>)
     : RecyclerView.Adapter<DoWorkoutAdapter.ViewHolder>() {
 
 
@@ -24,8 +24,9 @@ class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Custo
     lateinit var workoutSetState: List<ArrayList<Boolean>>
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        workoutSetState = List(customizations.count(), { index: Int ->
-            var setLength = customizations[index].setNumber
+        workoutSetState = List(exersizeList.count(), { index: Int ->
+            var exersize = exersizeList[index]
+            var setLength = exersize.sets
             if (setLength == null)
                     setLength = 0
             var arr = ArrayList<Boolean>()
@@ -44,7 +45,7 @@ class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Custo
     }
 
     override fun getItemCount(): Int {
-        return customizations.count()
+        return exersizeList.count()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -57,14 +58,13 @@ class DoWorkoutAdapter(val context: Context, val customizations: ArrayList<Custo
         val exersizeWeightText = itemView.findViewById<TextView>(R.id.exersizeWeightText)
 
         fun BindViewHolder(context: Context, position: Int) {
-            val customization = customizations[position]
-            val exersize = customization.exersize
-            val setNumber = customization.setNumber
-            val repNumber = customization.reps
+            val exersize = exersizeList[position]
+            val setNumber = exersize.sets
+            val repNumber = exersize.reps
             val resource = context.resources.getIdentifier(exersize?.image, "drawable", context.packageName)
             image.setImageResource(resource)
-            if(customization.measurementType != MeasurementTypes.NA) {
-                exersizeWeightText.text = "${customization.measurement} ${customization.measurementType}"
+            if(exersize.measureType != MeasurementTypes.NA) {
+                exersizeWeightText.text = "${exersize.measure} ${exersize.measureType}"
             }
             var i = 0
 
