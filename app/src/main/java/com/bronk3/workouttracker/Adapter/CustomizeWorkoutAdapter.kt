@@ -23,6 +23,10 @@ class CustomizeWorkoutAdapter(val context: Context, val exersizeList: ArrayList<
         return ViewHolder(inflatedView)
     }
 
+    fun returnCustomizedExersizeList(): ArrayList<Exersize> {
+        return exersizeList
+    }
+
     override fun getItemCount(): Int {
         return exersizeList.count()
     }

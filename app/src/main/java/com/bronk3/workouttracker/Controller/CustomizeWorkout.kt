@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.activity_customize_workout.*
 
 class CustomizeWorkout : AppCompatActivity() {
 
+    lateinit var adapter: CustomizeWorkoutAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customize_workout)
@@ -44,13 +46,14 @@ class CustomizeWorkout : AppCompatActivity() {
                     }.show()
         }
         //Show Edit Exercises
-        editWorkout.adapter = CustomizeWorkoutAdapter(this, workout.ExersizeList!!, onTextChange)
+        adapter = CustomizeWorkoutAdapter(this, workout.ExersizeList!!, onTextChange)
+        editWorkout.adapter = adapter
         editWorkout.layoutManager = LinearLayoutManager(this)
         editWorkout.setHasFixedSize(true)
 
         // Save Customization
         submitEditChanges.setOnClickListener {
-            println(workout)
+            WorkoutCollection.database[workoutId].ExersizeList!!.update(adapter.returnCustomizedExersizeList())
             val intent = Intent(this, WorkoutMain::class.java)
             startActivity(intent)
         }

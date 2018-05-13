@@ -18,16 +18,12 @@ import kotlinx.android.synthetic.main.activity_create_workout.*
 
 class CreateWorkout : AppCompatActivity() {
 
-    var selectedExersizeArrayList = ArrayList<Exersize>()
     lateinit var adapter: CreateWorkoutAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_workout)
 
-        val exersizeClick = { exersize: Exersize ->
-            selectedExersizeArrayList.add(exersize)
-        }
 
         CustomizeWorkoutBtn.setOnClickListener {
             var builder = AlertDialog.Builder(this)
@@ -35,7 +31,7 @@ class CreateWorkout : AppCompatActivity() {
             builder.setView(layout)
                     .setPositiveButton("Ok") { _, _ ->
                         val workoutName = layout.findViewById<EditText>(R.id.dialogWorkoutName)
-                        selectedExersizeArrayList = adapter.returnSelectedExersizeArray()
+                        val selectedExersizeArrayList = getSelected(adapter.returnSelectedExersizeArray())
                         val newWorkout =
                                 WorkoutCollection.create(workoutName.text.toString(), getDateNow(), selectedExersizeArrayList)
                         val customizeWorkout = Intent(this, CustomizeWorkout::class.java)
@@ -48,10 +44,18 @@ class CreateWorkout : AppCompatActivity() {
         }
 
         // Show Exersizes
-        adapter = CreateWorkoutAdapter(this, ExersizeCollection.database, exersizeClick)
+        adapter = CreateWorkoutAdapter(this, ExersizeCollection.database)
         chooseExersize.adapter = adapter
         chooseExersize.layoutManager = GridLayoutManager(this, 3)
         chooseExersize.setHasFixedSize(true)
+    }
 
+    fun getSelected(selectedBooleanArray: BooleanArray) : ArrayList<Exersize> {
+        val selected = ArrayList<Exersize>()
+        for((index, value) in selectedBooleanArray.withIndex()) {
+            if(value)
+                selected.add(ExersizeCollection.database[index])
+        }
+        return selected
     }
 }

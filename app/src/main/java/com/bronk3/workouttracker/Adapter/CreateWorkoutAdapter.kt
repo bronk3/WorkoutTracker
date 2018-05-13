@@ -13,7 +13,7 @@ import com.bronk3.workouttracker.R
 import kotlin.math.absoluteValue
 
 
-class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>, val itemClick: (Exersize) -> Boolean)
+class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>)
     : RecyclerView.Adapter<CreateWorkoutAdapter.ViewHolder>() {
 
     val selectedExersizeArray = BooleanArray(exersizeList.count()){ position -> false }
@@ -34,7 +34,7 @@ class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersiz
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.BindViewHolder(context, position, itemClick)
+        holder.BindViewHolder(context, position)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -50,25 +50,31 @@ class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersiz
         val image = itemView.findViewById<ImageView>(R.id.exersizeImage)
         val name = itemView.findViewById<TextView>(R.id.exersizeName)
 
-        fun BindViewHolder (context: Context, position: Int, itemClick: (Exersize) -> Boolean) {
+        fun BindViewHolder (context: Context, position: Int) {
             val exersize = exersizeList[position]
             val resourceId = context.resources.getIdentifier(exersize.image, "drawable", context.packageName)
             image.setImageResource(resourceId)
             name.text = exersize.name.Name
-            itemView.setTag( exersize)
+            itemView.setTag(exersize)
+
+            if(selectedExersizeArray[position]) {
+                itemView.setBackgroundResource(R.color.colorPrimary)
+                name.setTextColor(Color.WHITE)
+            } else {
+                itemView.setBackgroundColor(Color.TRANSPARENT)
+                name.setTextColor(R.color.colorPrimaryDark.absoluteValue)
+            }
 
             itemView.setOnClickListener { view ->
-                if(!view.isSelected) {
-                    selectedExersizeArray[2]
-                    view.isSelected = true
+                if(!selectedExersizeArray[position]) {
+                    selectedExersizeArray[position] = true
                     view.setBackgroundResource(R.color.colorPrimary)
                     name.setTextColor(Color.WHITE)
                 } else {
-                    view.isSelected = false
+                    selectedExersizeArray[position]= false
                     view.setBackgroundColor(Color.TRANSPARENT)
                     name.setTextColor(R.color.colorPrimaryDark.absoluteValue)
                 }
-                itemClick(view.getTag() as Exersize)
             }
         }
     }
