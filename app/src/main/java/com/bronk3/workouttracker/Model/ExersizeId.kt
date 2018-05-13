@@ -16,9 +16,8 @@ enum class ExersizeId(val Name: String): Parcelable {
     constructor(parcel: Parcel) : this(parcel.readString()) {
         parcel.readString()
     }
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(Name)
+        parcel.writeInt(ordinal)
     }
 
     override fun describeContents(): Int {
@@ -26,6 +25,7 @@ enum class ExersizeId(val Name: String): Parcelable {
     }
 
     companion object CREATOR : Parcelable.Creator<ExersizeId> {
+
         override fun createFromParcel(parcel: Parcel): ExersizeId {
             return ExersizeId.values()[parcel.readInt()]
         }

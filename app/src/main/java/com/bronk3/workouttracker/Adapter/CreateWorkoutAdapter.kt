@@ -16,6 +16,12 @@ import kotlin.math.absoluteValue
 class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>, val itemClick: (Exersize) -> Boolean)
     : RecyclerView.Adapter<CreateWorkoutAdapter.ViewHolder>() {
 
+    val selectedExersizeArray = BooleanArray(exersizeList.count()){ position -> false }
+
+    fun returnSelectedExersizeArray(): BooleanArray {
+        return selectedExersizeArray
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //Inflator
         val view = LayoutInflater.from(context).inflate(R.layout.create_workout_adapter, parent, false)
@@ -31,6 +37,14 @@ class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersiz
         holder.BindViewHolder(context, position, itemClick)
     }
 
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        println(selectedExersizeArray)
+    }
+
+    override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
+        println("who dun it")
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val image = itemView.findViewById<ImageView>(R.id.exersizeImage)
@@ -41,10 +55,11 @@ class CreateWorkoutAdapter(val context: Context, val exersizeList: Array<Exersiz
             val resourceId = context.resources.getIdentifier(exersize.image, "drawable", context.packageName)
             image.setImageResource(resourceId)
             name.text = exersize.name.Name
-            itemView.setTag(exersize)
+            itemView.setTag( exersize)
 
             itemView.setOnClickListener { view ->
                 if(!view.isSelected) {
+                    selectedExersizeArray[2]
                     view.isSelected = true
                     view.setBackgroundResource(R.color.colorPrimary)
                     name.setTextColor(Color.WHITE)

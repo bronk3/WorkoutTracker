@@ -13,7 +13,7 @@ import android.widget.AdapterView
 import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.MeasurementTypes
 
-class CustomizeWorkoutAdapter(val context: Context, val exersizeList: Array<Exersize>) :
+class CustomizeWorkoutAdapter(val context: Context, val exersizeList: ArrayList<Exersize>, val onTextChange: (Int, Exersize) -> Unit) :
         RecyclerView.Adapter<CustomizeWorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,11 +28,10 @@ class CustomizeWorkoutAdapter(val context: Context, val exersizeList: Array<Exer
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViewHolder(context, holder, position)
+        holder.bindViewHolder(context, position, onTextChange)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-
         //Get View Fields
         val exersizeImage = itemView.findViewById<ImageView>(R.id.exersizeImage)
         val repText = itemView.findViewById<EditText>(R.id.repText)
@@ -40,7 +39,7 @@ class CustomizeWorkoutAdapter(val context: Context, val exersizeList: Array<Exer
         val weightText = itemView.findViewById<EditText>(R.id.weightText)
         val weightTypeDropDown = itemView.findViewById<Spinner>(R.id.weightTypeText)
 
-        fun bindViewHolder(context: Context, holder: ViewHolder, position: Int) {
+        fun bindViewHolder(context: Context, position: Int, onTextChange: (Int, Exersize) -> Unit) {
             val exersize = exersizeList[position]
             val resourceId = context.resources.getIdentifier(exersize.image,
                     "drawable", context.packageName)
@@ -57,29 +56,40 @@ class CustomizeWorkoutAdapter(val context: Context, val exersizeList: Array<Exer
             weightTypeDropDown.setSelection(MeasurementTypes.values().indexOf(exersize.measureType))
 
             //Data Change Listeners
-            repText.addTextChangedListener(TextWatch("rep", exersize))
-            setText.addTextChangedListener(TextWatch("set", exersize))
-            weightText.addTextChangedListener(TextWatch("measure", exersize))
-            weightTypeDropDown.setOnItemSelectedListener(SpinnerListener(exersize))
+            repText.addTextChangedListener(TextWatch("rep", exersize, position, onTextChange))
+            setText.addTextChangedListener(TextWatch("set", exersize, position, onTextChange))
+            weightText.addTextChangedListener(TextWatch("measure", exersize, position, onTextChange))
+            weightTypeDropDown.setOnItemSelectedListener(SpinnerListener(exersize, position, onTextChange))
         }
     }
 }
 
-class SpinnerListener(val exersize: Exersize) : AdapterView.OnItemSelectedListener {
+class SpinnerListener(
+        val exersize: Exersize,
+        val exPosition: Int,
+        val onTextChange: (Int, Exersize) -> Unit
+) : AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
         exersize.measureType = MeasurementTypes.values()[position]
+        onTextChange(exPosition, exersize)
     }
     override fun onNothingSelected(parentView: AdapterView<*>) {}
 }
 
-class TextWatch(val type: String, val exersize: Exersize) : TextWatcher {
+class TextWatch(val type: String, val exersize: Exersize, val position: Int, val onTextChange: (Int, Exersize) -> Unit) : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
+        var newNum = 0
+        try {
+            newNum = s.toString().toInt()
+        } catch (e: Exception) {}
+
         when(type) {
-            "rep" -> exersize.reps = s.toString().toInt()
-            "set" ->exersize.sets = s.toString().toInt()
-            "measure" ->exersize.measure = s.toString().toInt()
+            "rep" -> exersize.reps = newNum
+            "set" ->exersize.sets = newNum
+            "measure" ->exersize.measure = newNum
             else -> ""
         }
+        onTextChange(position, exersize)
     }
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}

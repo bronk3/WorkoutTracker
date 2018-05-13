@@ -11,6 +11,7 @@ import com.bronk3.workouttracker.Adapter.CreateWorkoutAdapter
 import com.bronk3.workouttracker.Model.Exersize
 import com.bronk3.workouttracker.Model.ExersizeCollection
 import com.bronk3.workouttracker.Model.Workout
+import com.bronk3.workouttracker.Model.WorkoutCollection
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Utility.*
 import kotlinx.android.synthetic.main.activity_create_workout.*
@@ -18,12 +19,12 @@ import kotlinx.android.synthetic.main.activity_create_workout.*
 class CreateWorkout : AppCompatActivity() {
 
     var selectedExersizeArrayList = ArrayList<Exersize>()
+    lateinit var adapter: CreateWorkoutAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_workout)
 
-        //
         val exersizeClick = { exersize: Exersize ->
             selectedExersizeArrayList.add(exersize)
         }
@@ -34,11 +35,12 @@ class CreateWorkout : AppCompatActivity() {
             builder.setView(layout)
                     .setPositiveButton("Ok") { _, _ ->
                         val workoutName = layout.findViewById<EditText>(R.id.dialogWorkoutName)
-                        val newWorkout = Workout(workoutName.text.toString(), getDateNow(), ArrayList())
-
+                        selectedExersizeArrayList = adapter.returnSelectedExersizeArray()
+                        val newWorkout =
+                                WorkoutCollection.create(workoutName.text.toString(), getDateNow(), selectedExersizeArrayList)
                         val customizeWorkout = Intent(this, CustomizeWorkout::class.java)
                         customizeWorkout.putExtra(WORKOUT, newWorkout)
-                        customizeWorkout.putExtra(EXERSIZE_LIST, selectedExersizeArrayList)
+                        customizeWorkout.putExtra(WORKOUT_ID, newWorkout.Id)
                         startActivity(customizeWorkout)
                     }
                     .setNegativeButton("Cancel") { _, _ ->
@@ -46,7 +48,8 @@ class CreateWorkout : AppCompatActivity() {
         }
 
         // Show Exersizes
-        chooseExersize.adapter = CreateWorkoutAdapter(this, ExersizeCollection.database, exersizeClick)
+        adapter = CreateWorkoutAdapter(this, ExersizeCollection.database, exersizeClick)
+        chooseExersize.adapter = adapter
         chooseExersize.layoutManager = GridLayoutManager(this, 3)
         chooseExersize.setHasFixedSize(true)
 

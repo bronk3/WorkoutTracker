@@ -14,7 +14,7 @@ import com.bronk3.workouttracker.Model.Workout
 import com.bronk3.workouttracker.R
 import com.bronk3.workouttracker.Utility.*
 
-class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout) -> Unit, val editClick: (Workout) -> Unit)
+class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val itemClicked: (Workout, Int) -> Unit, val editClick: (Workout, Int) -> Unit)
     : RecyclerView.Adapter<WorkoutAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,19 +41,19 @@ class WorkoutAdapter(val context: Context, val workouts: ArrayList<Workout>, val
 
 
         // bind view items
-        fun bindWorkout(context: Context, position: Int, itemClick: (Workout) -> Unit, editClick: (Workout) -> Unit) {
+        fun bindWorkout(context: Context, position: Int, itemClick: (Workout, Int) -> Unit, editClick: (Workout, Int) -> Unit) {
             var current = workouts[position]
-            nameLbl?.text = current.name.toUpperCase()
+            nameLbl?.text = current.name?.toUpperCase()
             timestampLbl?.text = current.timeStamp
 
             nameLbl?.setOnClickListener {
                 current.timeStamp = getDateNow()
                 timestampLbl?.text = current.timeStamp
-                itemClick(current)
+                itemClick(current, position)
             }
 
             editBtn?.setOnClickListener {
-                editClick(current)
+                editClick(current, position)
             }
         }
     }

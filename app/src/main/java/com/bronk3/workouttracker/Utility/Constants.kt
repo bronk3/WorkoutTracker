@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 const val WORKOUT = "Workout"
-const val EXERSIZE_LIST = "Exersize list"
+const val WORKOUT_ID = "Workout Id"
+const val EXERSIZE_LIST = "Exersize List"
 
 fun getDateNow(): String {
     //MMM d, HH:mm

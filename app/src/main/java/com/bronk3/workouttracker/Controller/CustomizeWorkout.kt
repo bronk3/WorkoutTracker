@@ -21,11 +21,15 @@ class CustomizeWorkout : AppCompatActivity() {
 
         //Extras
         val workout = intent.getParcelableExtra<Workout>(WORKOUT)
+        val workoutId = intent.getIntExtra(WORKOUT_ID, 0)
+
+        var onTextChange = { exPos: Int, updateValue: Exersize  ->
+            WorkoutCollection.database[workoutId].ExersizeList!![exPos].update(updateValue)
+        }
 
         //View
         workoutName.setText(workout.name)
         workoutName.setOnClickListener { view: View ->
-
             var builder = AlertDialog.Builder(this)
             var layout = layoutInflater.inflate(R.layout.workout_name_alert, null)
 
@@ -39,16 +43,14 @@ class CustomizeWorkout : AppCompatActivity() {
 
                     }.show()
         }
-
-        //Adapter
-        val adapter = CustomizeWorkoutAdapter(this, ExersizeCollection.database)
-        editWorkout.adapter = adapter
-        val linearLayoutManager = LinearLayoutManager(this)
-        editWorkout.layoutManager = linearLayoutManager
+        //Show Edit Exercises
+        editWorkout.adapter = CustomizeWorkoutAdapter(this, workout.ExersizeList!!, onTextChange)
+        editWorkout.layoutManager = LinearLayoutManager(this)
         editWorkout.setHasFixedSize(true)
 
         // Save Customization
         submitEditChanges.setOnClickListener {
+            println(workout)
             val intent = Intent(this, WorkoutMain::class.java)
             startActivity(intent)
         }
